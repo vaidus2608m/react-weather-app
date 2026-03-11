@@ -2,6 +2,10 @@
 
 A beautiful, minimal, and eye-soothing weather application built with React and Vite. It provides real-time weather data with dynamic, pastel-themed backgrounds that change based on the current temperature.
 
+## Live Demo 🌐
+
+https://react-weather-app-one-peach.vercel.app/
+
 ## Features ✨
 
 - **Real-time Weather Data:** Fetches current weather conditions including temperature, humidity, and wind speed using the OpenWeatherMap API.

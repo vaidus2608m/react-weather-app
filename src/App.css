@@ -1,0 +1,390 @@
+/* ============================================================
+   WEATHER APP — SOFT PASTEL UI
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap");
+
+/* ── Reset ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ============================================================
+   THEME TOKENS — CSS CUSTOM PROPERTIES
+   Each theme block overrides these variables:
+     --grad-a / --grad-b / --grad-c   page background gradient
+     --accent                          button / focus colour
+     --accent-glow                     button shadow tint
+     --card-bg                         card glass background
+     --temp-color                      large temperature text
+     --icon-glow                       weather icon drop-shadow
+   ============================================================ */
+
+/* ── Default / no city yet  →  soft sky blue ── */
+.app-root {
+  --grad-a:       #dbeafe;
+  --grad-b:       #bfdbfe;
+  --grad-c:       #e0f2fe;
+  --accent:       #60a5fa;
+  --accent-glow:  rgba(96, 165, 250, 0.35);
+  --card-bg:      rgba(255, 255, 255, 0.58);
+  --temp-color:   #2563eb;
+  --icon-glow:    drop-shadow(0 4px 14px rgba(96, 165, 250, 0.55));
+  --text-primary: #1e3a5f;
+  --text-muted:   #5a7a9e;
+  --divider:      rgba(96, 165, 250, 0.18);
+}
+
+/* ── Cold  < 10 °C  →  icy blue-lavender ── */
+.app-root.theme-cold {
+  --grad-a:       #e0e7ff;
+  --grad-b:       #c7d2fe;
+  --grad-c:       #ddd6fe;
+  --accent:       #818cf8;
+  --accent-glow:  rgba(129, 140, 248, 0.38);
+  --card-bg:      rgba(255, 255, 255, 0.60);
+  --temp-color:   #4338ca;
+  --icon-glow:    drop-shadow(0 4px 14px rgba(129, 140, 248, 0.55));
+  --text-primary: #312e81;
+  --text-muted:   #6366f1;
+  --divider:      rgba(129, 140, 248, 0.2);
+}
+
+/* ── Mild  10–25 °C  →  pale mint sky ── */
+.app-root.theme-mild {
+  --grad-a:       #d1fae5;
+  --grad-b:       #a7f3d0;
+  --grad-c:       #cffafe;
+  --accent:       #34d399;
+  --accent-glow:  rgba(52, 211, 153, 0.38);
+  --card-bg:      rgba(255, 255, 255, 0.60);
+  --temp-color:   #065f46;
+  --icon-glow:    drop-shadow(0 4px 14px rgba(52, 211, 153, 0.55));
+  --text-primary: #064e3b;
+  --text-muted:   #059669;
+  --divider:      rgba(52, 211, 153, 0.2);
+}
+
+/* ── Warm  25–35 °C  →  peach-amber sunset ── */
+.app-root.theme-warm {
+  --grad-a:       #fef3c7;
+  --grad-b:       #fed7aa;
+  --grad-c:       #fde68a;
+  --accent:       #f59e0b;
+  --accent-glow:  rgba(245, 158, 11, 0.38);
+  --card-bg:      rgba(255, 255, 255, 0.62);
+  --temp-color:   #b45309;
+  --icon-glow:    drop-shadow(0 4px 14px rgba(251, 191, 36, 0.55));
+  --text-primary: #78350f;
+  --text-muted:   #d97706;
+  --divider:      rgba(245, 158, 11, 0.2);
+}
+
+/* ── Hot  > 35 °C  →  soft coral-rose ── */
+.app-root.theme-hot {
+  --grad-a:       #ffe4e6;
+  --grad-b:       #fecdd3;
+  --grad-c:       #fde8d8;
+  --accent:       #fb7185;
+  --accent-glow:  rgba(251, 113, 133, 0.38);
+  --card-bg:      rgba(255, 255, 255, 0.62);
+  --temp-color:   #be123c;
+  --icon-glow:    drop-shadow(0 4px 14px rgba(251, 113, 133, 0.55));
+  --text-primary: #881337;
+  --text-muted:   #e11d48;
+  --divider:      rgba(251, 113, 133, 0.2);
+}
+
+/* ============================================================
+   PAGE WRAPPER
+   ============================================================ */
+.app-root {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background: linear-gradient(145deg, var(--grad-a) 0%, var(--grad-b) 50%, var(--grad-c) 100%);
+  font-family: "Nunito", system-ui, sans-serif;
+  transition: background 0.8s ease;
+}
+
+/* ============================================================
+   HEADING
+   ============================================================ */
+.app-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 28px;
+  letter-spacing: -0.3px;
+  text-align: center;
+  transition: color 0.6s ease;
+}
+
+.app-title .title-icon {
+  display: inline-block;
+  margin-right: 8px;
+  animation: float 3.5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+/* ============================================================
+   SEARCH BAR
+   ============================================================ */
+.search-bar {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+  margin-bottom: 28px;
+}
+
+.search-field {
+  flex: 1;
+  padding: 12px 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-family: "Nunito", system-ui, sans-serif;
+  font-weight: 500;
+  outline: none;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.6s ease;
+}
+
+.search-field::placeholder { color: var(--text-muted); opacity: 0.7; }
+
+.search-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow), 0 2px 12px rgba(0, 0, 0, 0.07);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.search-btn {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 50px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: "Nunito", system-ui, sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px var(--accent-glow);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease,
+    background 0.6s ease;
+}
+
+.search-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px var(--accent-glow);
+  filter: brightness(1.08);
+}
+
+.search-btn:active {
+  transform: translateY(0);
+  filter: brightness(0.96);
+}
+
+/* ============================================================
+   WEATHER CARD
+   ============================================================ */
+.weather-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 28px;
+  padding: 36px 32px 32px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 1px 1px rgba(255, 255, 255, 0.9) inset;
+  text-align: center;
+  transition:
+    background 0.6s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+  animation: cardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.weather-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 44px rgba(0, 0, 0, 0.11),
+    0 1px 1px rgba(255, 255, 255, 0.9) inset;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(22px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* City */
+.card-city {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  letter-spacing: -0.3px;
+  transition: color 0.6s ease;
+}
+
+/* Icon */
+.card-icon {
+  width: 96px;
+  height: 96px;
+  margin: 6px auto 2px;
+  filter: var(--icon-glow);
+  transition: filter 0.6s ease;
+}
+
+/* Description */
+.card-description {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  text-transform: capitalize;
+  transition: color 0.6s ease;
+}
+
+/* Temperature */
+.card-temp {
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--temp-color);
+  letter-spacing: -3px;
+  margin-bottom: 28px;
+  transition: color 0.6s ease;
+}
+
+.card-temp sup {
+  font-size: 1.6rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--text-muted);
+  vertical-align: super;
+}
+
+/* Divider */
+.card-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--divider);
+  margin-bottom: 22px;
+  border: none;
+  transition: background 0.6s ease;
+}
+
+/* Stats grid */
+.card-stats {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+}
+
+.card-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-emoji { font-size: 1.2rem; }
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.6s ease;
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  transition: color 0.6s ease;
+}
+
+/* ============================================================
+   EMPTY / PLACEHOLDER STATE
+   ============================================================ */
+.empty-state {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0.7;
+  margin-top: 4px;
+  transition: color 0.6s ease;
+}
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--divider);
+  border-top-color: var(--accent);
+  animation: spin 0.75s linear infinite;
+  transition: border-top-color 0.6s ease;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+.error-pill {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #be123c;
+  background: rgba(255, 228, 230, 0.85);
+  border: 1px solid rgba(251, 113, 133, 0.35);
+  border-radius: 50px;
+  padding: 10px 24px;
+  backdrop-filter: blur(8px);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 480px) {
+  .app-title      { font-size: 1.5rem; }
+  .search-bar     { flex-direction: column; }
+  .search-btn     { width: 100%; text-align: center; }
+  .card-temp      { font-size: 4rem; }
+  .weather-card   { padding: 28px 20px 24px; }
+  .card-city      { font-size: 1.4rem; }
+}
